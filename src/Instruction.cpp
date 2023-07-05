@@ -377,7 +377,7 @@ void InstructionManager::launch(Bus &bus)
         {
             jalrFlag = false;
             PC_.getValue() = static_cast<signedContext>(offset_) + bus.getReorderBuffer()[dependency_].value;
-            bus.getReorderBuffer()[jalrRow].tellAfterPC = PC_.getValue();
+//            bus.getReorderBuffer()[jalrRow].tellAfterPC = PC_.getValue();
             bus.getReorderBuffer()[jalrRow].ready = true;
 #ifdef find20000
             if (PC_.getValue() == 0x20000)//0x20000 = 131072
@@ -426,13 +426,13 @@ void InstructionManager::launch(Bus &bus)
         case InstructionType::LUI://直接ready，不用放RS中
         {
             RoBRow row;
-            row.info = curInstruction;
+//            row.info = curInstruction;
             row.type = RoBType::registerWrite;
             row.ready = true;
             row.value = curInstruction.offset;
             row.index = curInstruction.destinationRegister;
             PC_.getValue() += 4;
-            row.tellAfterPC = PC_.getValue();
+//            row.tellAfterPC = PC_.getValue();
             bus.getReorderBuffer().Add(row, bus);
 #ifdef find20000
             if (PC_.getValue() == 0x20000)//0x20000 = 131072
@@ -445,13 +445,13 @@ void InstructionManager::launch(Bus &bus)
         case InstructionType::AUIPC:
         {
             RoBRow row;
-            row.info = curInstruction;
+//            row.info = curInstruction;
             row.ready = true;
             row.type = RoBType::registerWrite;
             row.value = curInstruction.offset + PC_.getValue();
             row.index = curInstruction.destinationRegister;
             PC_.getValue() += 4;
-            row.tellAfterPC = PC_.getValue();
+//            row.tellAfterPC = PC_.getValue();
             bus.getReorderBuffer().Add(row, bus);
 #ifdef find20000
             if (PC_.getValue() == 0x20000)//0x20000 = 131072
@@ -463,34 +463,34 @@ void InstructionManager::launch(Bus &bus)
         }
         case InstructionType::JAL:
         {
-             RoBRow row;
-             row.info = curInstruction;
-             row.ready = true;
-             row.type = RoBType::registerWrite;
-             row.value = PC_.getValue() + 4;
-             row.index = curInstruction.destinationRegister;
-             PC_.getValue() += static_cast<signedContext>(curInstruction.offset);
-             row.tellAfterPC = PC_.getValue();
-             bus.getReorderBuffer().Add(row, bus);
+            RoBRow row;
+//            row.info = curInstruction;
+            row.ready = true;
+            row.type = RoBType::registerWrite;
+            row.value = PC_.getValue() + 4;
+            row.index = curInstruction.destinationRegister;
+            PC_.getValue() += static_cast<signedContext>(curInstruction.offset);
+//            row.tellAfterPC = PC_.getValue();
+            bus.getReorderBuffer().Add(row, bus);
 #ifdef find20000
             if (PC_.getValue() == 0x20000)//0x20000 = 131072
             {
                 std::cout<<"this is a neg circle #11\n";
             }
 #endif
-             break;
+            break;
         }
         case InstructionType::JALR:
         {
             RoBRow row;
-            row.info = curInstruction;
+//            row.info = curInstruction;
             row.type = RoBType::registerWrite;
             row.index = curInstruction.destinationRegister;
             row.value = PC_.getValue() + 4;
             if (!bus.getRegisterFile()[curInstruction.sourceRegister1].tellOccupy())
             {
                 PC_.getValue() = (bus.getRegisterFile()[curInstruction.sourceRegister1].getValue() + static_cast<signedContext>(curInstruction.offset)) & ~1;
-                row.tellAfterPC = PC_.getValue();
+//                row.tellAfterPC = PC_.getValue();
                 row.ready = true;
                 bus.getReorderBuffer().Add(row, bus);
 #ifdef find20000
@@ -506,7 +506,7 @@ void InstructionManager::launch(Bus &bus)
                 if (bus.getReorderBuffer()[tmpProblem].ready)
                 {
                     PC_.getValue() = (bus.getReorderBuffer()[tmpProblem].value + static_cast<signedContext>(curInstruction.offset)) & ~1;
-                    row.tellAfterPC = PC_.getValue();
+//                    row.tellAfterPC = PC_.getValue();
                     row.ready = true;
                     bus.getReorderBuffer().Add(row, bus);
 #ifdef find20000
@@ -529,7 +529,7 @@ void InstructionManager::launch(Bus &bus)
             }
             break;
         }
-        //BEQ BNE BLT BGE BLTU BGEU
+            //BEQ BNE BLT BGE BLTU BGEU
         case InstructionType::BEQ:
         case InstructionType::BNE:
         case InstructionType::BLT:
@@ -539,7 +539,7 @@ void InstructionManager::launch(Bus &bus)
         {
             //试图取出
             RoBRow rowRoB;
-            rowRoB.info = curInstruction;
+//            rowRoB.info = curInstruction;
             rowRoB.ready = false;
             rowRoB.type = RoBType::branch;
             RSRow rowRS;
@@ -570,7 +570,7 @@ void InstructionManager::launch(Bus &bus)
             {
                 rowRoB.index = PC_.getValue() + 4;
                 PC_.getValue() += static_cast<signedContext>(curInstruction.offset);
-                rowRoB.tellAfterPC = PC_.getValue();
+//                rowRoB.tellAfterPC = PC_.getValue();
 #ifdef find20000
                 if (PC_.getValue() == 0x20000)//0x20000 = 131072
                 {
@@ -582,7 +582,7 @@ void InstructionManager::launch(Bus &bus)
             {
                 rowRoB.index = PC_.getValue() + static_cast<signedContext>(curInstruction.offset);
                 PC_.getValue() += 4;
-                rowRoB.tellAfterPC = PC_.getValue();
+//                rowRoB.tellAfterPC = PC_.getValue();
 #ifdef find20000
                 if (PC_.getValue() == 0x20000)//0x20000 = 131072
                 {
@@ -594,7 +594,7 @@ void InstructionManager::launch(Bus &bus)
             bus.getReservationStation().Add(rowRS, bus);
             break;
         }
-        //LB LH LW LBU LHU
+            //LB LH LW LBU LHU
         case InstructionType::LB:
         case InstructionType::LH:
         case InstructionType::LW:
@@ -602,7 +602,7 @@ void InstructionManager::launch(Bus &bus)
         case InstructionType::LHU:
         {
             RoBRow rowRoB;
-            rowRoB.info = curInstruction;
+//            rowRoB.info = curInstruction;
             rowRoB.type = RoBType::registerWrite;
             rowRoB.ready = false;
             rowRoB.index = curInstruction.destinationRegister;
@@ -622,7 +622,7 @@ void InstructionManager::launch(Bus &bus)
                 else {rowLS.locationDependence = true; rowLS.ready = false;}
             }
             PC_.getValue() += 4;
-            rowRoB.tellAfterPC = PC_.getValue();
+//            rowRoB.tellAfterPC = PC_.getValue();
             rowLS.RoBIndex = bus.getReorderBuffer().Add(rowRoB, bus);
             bus.getLoadStoreBuffer().Add(rowLS, bus);
 #ifdef find20000
@@ -639,7 +639,7 @@ void InstructionManager::launch(Bus &bus)
         case InstructionType::SW:
         {
             RoBRow rowRoB;
-            rowRoB.info = curInstruction;
+//            rowRoB.info = curInstruction;
             rowRoB.ready = false;
             rowRoB.type = RoBType::memoryWrite;
             loadStoreRow rowLS;
@@ -666,7 +666,7 @@ void InstructionManager::launch(Bus &bus)
                 else {rowLS.valueDependence = true; rowLS.ready = false;}
             }
             PC_.getValue() += 4;
-            rowRoB.tellAfterPC = PC_.getValue();
+//            rowRoB.tellAfterPC = PC_.getValue();
             rowRoB.index = bus.getLoadStoreBuffer().innerTailIndex();
             rowLS.RoBIndex = bus.getReorderBuffer().Add(rowRoB, bus);
             bus.getLoadStoreBuffer().Add(rowLS, bus);
@@ -681,7 +681,7 @@ void InstructionManager::launch(Bus &bus)
         case InstructionType::ADDI:
         {
             RoBRow rowRoB;
-            rowRoB.info = curInstruction;
+//            rowRoB.info = curInstruction;
             rowRoB.ready = false;
             rowRoB.type = RoBType::registerWrite;
             rowRoB.index = curInstruction.destinationRegister;
@@ -699,7 +699,7 @@ void InstructionManager::launch(Bus &bus)
                 else {rowRS.Q1dependence = true; rowRS.busy = true;}
             }
             PC_.getValue() += 4;
-            rowRoB.tellAfterPC = PC_.getValue();
+//            rowRoB.tellAfterPC = PC_.getValue();
             rowRS.RoBIndex = bus.getReorderBuffer().Add(rowRoB, bus);
             bus.getReservationStation().Add(rowRS, bus);
 #ifdef find20000
@@ -720,7 +720,7 @@ void InstructionManager::launch(Bus &bus)
         case InstructionType::SRAI:
         {
             RoBRow rowRoB;
-            rowRoB.info = curInstruction;
+//            rowRoB.info = curInstruction;
             rowRoB.ready = false;
             rowRoB.type = RoBType::registerWrite;
             rowRoB.index = curInstruction.destinationRegister;
@@ -738,7 +738,7 @@ void InstructionManager::launch(Bus &bus)
                 else {rowRS.Q1dependence = true; rowRS.busy = true;}
             }
             PC_.getValue() += 4;
-            rowRoB.tellAfterPC = PC_.getValue();
+//            rowRoB.tellAfterPC = PC_.getValue();
             rowRS.RoBIndex = bus.getReorderBuffer().Add(rowRoB, bus);
             bus.getReservationStation().Add(rowRS, bus);
 #ifdef find20000
@@ -761,7 +761,7 @@ void InstructionManager::launch(Bus &bus)
         case InstructionType::AND:
         {
             RoBRow rowRoB;
-            rowRoB.info = curInstruction;
+//            rowRoB.info = curInstruction;
             rowRoB.ready = false;
             rowRoB.type = RoBType::registerWrite;
             rowRoB.index = curInstruction.destinationRegister;
@@ -788,7 +788,7 @@ void InstructionManager::launch(Bus &bus)
                 else {rowRS.Q2dependence = true; rowRS.busy = true;}
             }
             PC_.getValue() += 4;
-            rowRoB.tellAfterPC = PC_.getValue();
+//            rowRoB.tellAfterPC = PC_.getValue();
             rowRS.RoBIndex = bus.getReorderBuffer().Add(rowRoB, bus);
             bus.getReservationStation().Add(rowRS, bus);
 #ifdef find20000
@@ -813,4 +813,3 @@ void InstructionManager::SetPC(Context pc) {PC_.getValue() = pc;}
 void InstructionManager::clear() {jalrFlag = false;}
 
 Predictor &InstructionManager::GetPredictor() {return predictor_;}
-

@@ -7,7 +7,6 @@ void Bus::clear()
     getRegisterFile().clearAllOccupy();
     getReservationStation().clear();
     getReorderBuffer().clear();
-    //leave the predictor and source alone
 }
 
 void Bus::Run()

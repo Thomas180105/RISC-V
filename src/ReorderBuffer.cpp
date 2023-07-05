@@ -53,6 +53,13 @@ void ReorderBuffer::tyrCommit(Bus &bus)
             bus.getPredictor().update(tmp.address, realBranch);
             if (realBranch != tmp.branchAdvise)
             {
+                bus.clear();
+                bus.getInstructionManager().SetPC(tmp.index);
+                return;
+            }
+            break;
+            /*if (realBranch != tmp.branchAdvise)
+            {
                 tmp.tellAfterPC = nextBuffer_.front().tellAfterPC = tmp.index;
 //                printDebugInfo(tmp, bus);
                 bus.clear();
@@ -63,7 +70,7 @@ void ReorderBuffer::tyrCommit(Bus &bus)
             {
 //                printDebugInfo(tmp, bus);
             }
-            break;
+            break;*/
         }
         case RoBType::end:
         {
@@ -74,10 +81,10 @@ void ReorderBuffer::tyrCommit(Bus &bus)
     nextBuffer_.pop();
 }
 
-void ReorderBuffer::printDebugInfo(RoBRow &row, Bus &bus) const
+/*void ReorderBuffer::printDebugInfo(RoBRow &row, Bus &bus) const
 {
     row.info.print();
     bus.getRegisterFile().printRegisterFile();
     std::cout<<row.tellAfterPC<<'\n';
 //    std::cout<<row.tellAfterPC<<" #"<<bus.getSourceManager().loadWord(4528)<<'\n';
-}
+}*/

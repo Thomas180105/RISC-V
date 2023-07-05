@@ -16,7 +16,7 @@ public:
     Location sourceRegister2 = 0;
     Location destinationRegister = 0;
     Context offset = 0;
-    string typeStrName[40] = {"lui", "auipc", "jal", "jalr", "beq", "bne", "blt",
+    /*string typeStrName[40] = {"lui", "auipc", "jal", "jalr", "beq", "bne", "blt",
                               "bge", "bltu", "bgeu", "lb", "lh", "lw", "lbu",
                               "lhu", "sb", "sh", "sw", "addi", "slti", "sltiu",
                               "xori", "ori", "andi", "slli", "srli", "srai", "add",
@@ -25,7 +25,7 @@ public:
     void print() const
     {
         std::cout<<typeStrName[int(typeId)]<<" "<<sourceRegister1<<" "<<sourceRegister2<<" "<<destinationRegister<<" "<<static_cast<signedContext>(offset)<<'\n';
-    }
+    }*/
 };
 
 InstructionInfo getInstructionInfo(const Context &input);

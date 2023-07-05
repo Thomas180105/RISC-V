@@ -15,8 +15,8 @@ struct RoBRow{
     Context value;
     Location address;//for branch, 存放未被选中的PC_跳转值
     bool branchAdvise;//for branch
-    Location tellAfterPC = -1;
-    InstructionInfo info;
+//    Location tellAfterPC = -1;
+//    InstructionInfo info;
 };
 
 class Bus;
@@ -33,7 +33,7 @@ public:
     bool full();
     void flush();
     void clear();
-    void printDebugInfo(RoBRow &row, Bus &bus) const;
+//    void printDebugInfo(RoBRow &row, Bus &bus) const;
 };
 
 
