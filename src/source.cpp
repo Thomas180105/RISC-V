@@ -37,13 +37,13 @@ void sourceManager::sourceInput()
 
 #include <bitset>
 #include "Instruction.h"
-void sourceManager::printInstruction(Context loc)
+/*void sourceManager::printInstruction(Context loc)
 {
     Context tmp = *(reinterpret_cast<Context *>(memory + loc));
     std::cout<<std::hex<<tmp<<" ";
     std::cout<<std::bitset<32>(tmp)<<' '<<std::dec;
     getInstructionInfo(tmp).print();
-}
+}*/
 
 Context sourceManager::readInstruction(Context loc)
 {

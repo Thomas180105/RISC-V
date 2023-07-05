@@ -15,7 +15,7 @@ public:
     void sourceInput();
     Context readInstruction(Context loc);
 
-    void printInstruction(Context loc);
+//    void printInstruction(Context loc);
 
     Context loadWord(Location index) const;
     Context loadHalfWord(Location index) const;
